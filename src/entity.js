@@ -86,13 +86,15 @@ const Entity = (initComponents = []) => {
   
   /**
    * Remove entity from the world.
+   *
    * @method dispose
    * @return { undefined }
    */
   const dispose = () => {};
   
   /**
-   * Init with components
+   * Init with components.
+   *
    * @method init
    * @return { undefined }
    */
