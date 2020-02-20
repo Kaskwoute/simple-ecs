@@ -1,28 +1,12 @@
 import { describe, Try } from 'riteway';
 import { Entity } from '../../src/entity';
 import { World } from '../../src/world';
-
-const position = {
-  name: 'position',
-
-  values: {
-    x: 0,
-    y: 0
-  }
-};
-
-const health = (health) => ({
-  name: 'health',
-
-  values: {
-    health: health
-  }
-});
+import { health, position, AliveSystem } from './helper';
 
 describe('World.addEntity', async assert => {
   const world = World();
   const entity = Entity([position]);
-
+  
   {
     world.addEntity(entity);
     
@@ -30,19 +14,19 @@ describe('World.addEntity', async assert => {
       given: 'an entity',
       should: 'add an entity to the world entity list',
       actual: world.getEntities().size,
-      expected: 1
+      expected: 1,
     });
   }
-
+  
   {
     const world2 = world;
     world2.addEntity(entity);
-
+    
     assert({
       given: 'an entity with same entityId',
       should: 'not perform action',
       actual: (world.getEntities() === world2.getEntities()),
-      expected: true
+      expected: true,
     });
   }
 });
@@ -50,61 +34,86 @@ describe('World.addEntity', async assert => {
 describe('World.removeEntity', async assert => {
   const world = World();
   const entity = Entity([position]);
-
+  
   world.addEntity(entity);
-
+  
   {
     world.removeEntity(entity.getId());
-
+    
     assert({
       given: 'an entityId',
       should: 'remove an entity from the world entity list',
       actual: world.getEntities().size,
-      expected: 0
+      expected: 0,
     });
   }
-
+  
   {
     world.addEntity(entity);
-
+    
     world.removeEntity('aza1sqdq45q');
-
+    
     assert({
       given: 'an unknown entityId',
       should: 'do nothing',
       actual: world.getEntities().size,
-      expected: 1
+      expected: 1,
     });
   }
 });
 
-//describe('World.addSystem', async assert => {
-//  const entity = Entity([]);
-//
-//  entity.addComponent(health(100));
-//
-//  {
-//    entity.removeComponent('health');
-//
-//    assert({
-//      given: 'removing a owned component',
-//      should: 'remove the component from entity.components',
-//      actual: entity.components,
-//      expected: {}
-//    });
-//
-//    entity.addComponent(health(100));
-//
-//    const entity2 = entity;
-//
-//    entity2.removeComponent('bloup');
-//
-//    assert({
-//      given: 'removing a unknown component',
-//      should: 'not change the object',
-//      actual: entity2.components,
-//      expected: entity.components
-//    });
-//  }
-//});
+describe('World.addSystem', async assert => {
+  const world = World();
+  
+  const system = new AliveSystem();
+  
+  {
+    world.addSystem(system);
+    
+    assert({
+      given: 'a system',
+      should: 'add a system to the system list',
+      actual: world.getSystems().size,
+      expected: 1,
+    });
+  
+    world.addSystem(system);
+    
+    assert({
+      given: 'same system',
+      should: 'not perform anything',
+      actual: world.getSystems().size,
+      expected: 1,
+    });
+  }
+});
 
+describe('World.removeSystem', async assert => {
+  const world = World();
+
+  const system = new AliveSystem();
+
+  {
+    world.addSystem(system);
+
+    world.removeSystem(system.id);
+
+    assert({
+      given: 'a systemId',
+      should: 'remove the system from the system list',
+      actual: world.getSystems().size,
+      expected: 0,
+    });
+  
+    world.addSystem(system);
+  
+    world.removeSystem('oqdjklsd54');
+  
+    assert({
+      given: 'a unknown systemId',
+      should: 'not perform anything',
+      actual: world.getSystems().size,
+      expected: 1,
+    });
+  }
+});

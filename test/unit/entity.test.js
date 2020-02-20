@@ -1,22 +1,6 @@
 import { describe, Try } from 'riteway';
 import { Entity } from '../../src/entity';
-
-const position = {
-  name: 'position',
-  
-  values: {
-    x: 0,
-    y: 0
-  }
-};
-
-const health = (health) => ({
-  name: 'health',
-  
-  values: {
-    health: health
-  }
-});
+import { health, position } from './helper';
 
 describe('Entity.addComponent', async assert => {
   const entity = Entity([]);

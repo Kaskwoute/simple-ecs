@@ -16,9 +16,9 @@ const World = () => {
   /**
    * Store all systems of the world.
    *
-   * @property { Array } systems
+   * @property { Map } systems<systemId, system>
    */
-  let systems = [];
+  let systems = new Map();
   
   /**
    * Retrieve world entities.
@@ -27,6 +27,14 @@ const World = () => {
    * @return { Map } entities
    */
   const getEntities = () => entities;
+  
+  /**
+   * Retrieve world systems.
+   *
+   * @method getSystems
+   * @return { Set } systems
+   */
+  const getSystems = () => systems;
   
   /**
    * Add an entity to the world.
@@ -57,7 +65,7 @@ const World = () => {
    */
   const removeEntity = (entityId) => {
     if (!entityId) {
-      console.warn('Entity should have an id');
+      console.warn('No id provided to remove entity');
       return;
     }
     
@@ -73,24 +81,37 @@ const World = () => {
    * @param  { System } system: The system to add.
    * @return { undefined }
    */
-  const addSystem = (system) => {};
+  const addSystem = (system) => {
+    if(!systems.has(system.id))
+      systems.set(system.id, system);
+  };
   
   /**
    * Remove a system from the world.
    *
    * @method removeSystem
-   * @param  { System } system: The system to remove.
+   * @param  { String } systemId: The system to remove.
    * @return { undefined }
    */
-  const removeSystem = () => {};
+  const removeSystem = (systemId) => {
+    if (!systemId) {
+      console.warn('No id provided to remove system');
+      return;
+    }
+  
+    if (!systems.has(systemId)) return;
+  
+    systems.delete(systemId);
+  };
   
   /**
-   * Update the world
+   * Update the world.
+   *
    * @return { undefined }
    */
   const update = () => {};
   
-  return Object.freeze({ getEntities, addEntity, removeEntity, addSystem, removeSystem, update })
+  return Object.freeze({ getEntities, getSystems, addEntity, removeEntity, addSystem, removeSystem, update })
 };
 
 export {
