@@ -7,7 +7,8 @@
   "scripts": {
     "bundle": "webpack --config webpack/prod.js",
     "bundle:watch": "webpack -w --config webpack/dev.js",
-    "test": "riteway -r @babel/register -r @babel/polyfill test/unit/*.test.js"
+    "test:unit": "riteway -r @babel/register -r @babel/polyfill test/unit/*.test.js",
+    "test:integration": "cucumber-js --require-module @babel/register --require-module @babel/polyfill ./test/cucumber/feature --format"
   },
   "author": "Antoine peyrin",
   "license": "ISC",
@@ -19,6 +20,7 @@
     "@babel/preset-env": "^7.8.4",
     "@babel/register": "^7.8.3",
     "@babel/runtime": "^7.8.4",
+    "assert": "^2.0.0",
     "babel-loader": "^8.0.6",
     "cucumber": "^6.0.5",
     "riteway": "^6.1.1",

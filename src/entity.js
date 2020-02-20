@@ -13,12 +13,12 @@ const Entity = (initComponents = []) => {
   const id = uniqid();
   
   /**
-   * Indicate a change in components (a component was removed or added)
-   * which require to re-compute entity eligibility to all systems.
+   * Reference to the world set of dirty entities
+   * Updated when entity has a change in component
    *
-   * @property { Boolean } systemsDirty
+   * @property { undefined | Set } entitiesSystemsDirty
    */
-  let systemsDirty = false;
+  let entitiesSystemsDirty = undefined;
   
   /**
    * Components of the entity stored as key-value pairs.
@@ -42,6 +42,21 @@ const Entity = (initComponents = []) => {
    * @return { Object } components
    */
   const getComponents = () => components;
+  
+  /**
+   * Append this entityId to the dirty array
+   *
+   * @method setDirty
+   */
+  const setDirty = () => {};
+  
+  /**
+   * Get entity id
+   *
+   * @method setWorld
+   * @param { Set } dirtyArray
+   */
+  const referenceDirtyArray = (dirtyArray) => { entitiesSystemsDirty = dirtyArray };
   
   /**
    * Add a component to the entity.
@@ -107,6 +122,7 @@ const Entity = (initComponents = []) => {
   return Object.freeze({
     getId,
     getComponents,
+    referenceDirtyArray,
     addComponent,
     removeComponent,
     dispose

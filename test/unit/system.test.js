@@ -1,6 +1,6 @@
 import { describe, Try } from 'riteway';
 import { Entity } from '../../src/entity';
-import { health, position, AliveSystem } from './helper';
+import { health, position, AliveSystem } from '../utils';
 
 describe('System.addEntity', async assert => {
   const entity = Entity([health(50)]);

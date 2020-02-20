@@ -9,9 +9,9 @@ const World = () => {
   /**
    * Store entities which need to be tested at beginning of next tick.
    *
-   * @property { Array } entitiesSystemsDirty
+   * @property { Set } entitiesSystemsDirty
    */
-  let entitiesSystemsDirty = [];
+  let entitiesSystemsDirty = new Set();
   
   /**
    * Store all systems of the world.
@@ -37,6 +37,14 @@ const World = () => {
   const getSystems = () => systems;
   
   /**
+   * Retrieve world systems.
+   *
+   * @method getDirtyEntities
+   * @return { Set } entitiesSystemsDirty
+   */
+  const getDirtyEntities = () => entitiesSystemsDirty;
+  
+  /**
    * Add an entity to the world.
    *
    * @method addEntity
@@ -52,7 +60,9 @@ const World = () => {
     }
     
     if (entities.has(id)) return;
-    
+  
+    entitiesSystemsDirty.add(id);
+  
     entities.set(id, entity);
   };
   
@@ -111,7 +121,7 @@ const World = () => {
    */
   const update = () => {};
   
-  return Object.freeze({ getEntities, getSystems, addEntity, removeEntity, addSystem, removeSystem, update })
+  return Object.freeze({ getEntities, getSystems, getDirtyEntities, addEntity, removeEntity, addSystem, removeSystem, update })
 };
 
 export {

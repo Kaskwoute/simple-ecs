@@ -1,4 +1,4 @@
-import { System } from '../../src/system';
+import { System } from '../src/system';
 
 const position = {
   name: 'position',
