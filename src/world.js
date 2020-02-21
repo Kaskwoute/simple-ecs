@@ -91,7 +91,7 @@ const World = () => {
     if (!entities.has(entityId)) return;
     
     systems.forEach(system => system.removeEntity(entityId));
-    
+
     entities.delete(entityId);
   };
   
@@ -103,8 +103,14 @@ const World = () => {
    * @return { undefined }
    */
   const addSystem = (system) => {
-    if (!systems.has(system.id))
+    if (!systems.has(system.id)) {
       systems.set(system.id, system);
+     
+      // TODO: Check if there is a better solution
+      system.dispose = function () {
+        removeSystem(this.id);
+      }
+    }
   };
   
   /**

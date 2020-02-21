@@ -1,4 +1,5 @@
 import uniqid from 'uniqid';
+import { noop } from './utils';
 
 const System = function () {
   /**
@@ -36,6 +37,8 @@ const System = function () {
   this.addEntity = function (entity) {
     if (this.isEligible(entity)) {
       this.entities.set(entity.getId(), entity);
+  
+      this.enter(entity)
     }
   };
   
@@ -53,15 +56,20 @@ const System = function () {
     }
     
     this.entities.delete(entityId);
+    
+    this.exit(this.entities.get(entityId));
   };
   
   /**
+   * Function is overwrite when attached to a world
    * Remove system from the world
    *
    * @method dispose
    * @return { undefined }
    */
-  this.dispose = function () {};
+  this.dispose = function () {
+    console.log(`System: ${this.id} is not attached to a world`)
+  };
   
   /**
    * Apply update to each entity of this system.
@@ -100,7 +108,7 @@ const System = function () {
    * Abstract method to subclass. Called when an entity is added to the system.
    *
    * @method  enter
-   * @param  {Entity} entity The added entity.
+   * @param  { Entity } entity The added entity.
    * @return { undefined }
    */
   this.enter = function (entity) {};
@@ -109,7 +117,7 @@ const System = function () {
    * Abstract method to subclass. Called when an entity is removed from the system.
    *
    * @method  exit
-   * @param  {Entity} entity The removed entity.
+   * @param  { Entity } entity The removed entity.
    * @return { undefined }
    */
   this.exit = function (entity) {};

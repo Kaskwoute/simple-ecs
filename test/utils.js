@@ -25,6 +25,8 @@ function AliveSystem() {
   this.update = function (entity) {
     let { health } = entity.getComponents();
 
+    health.health = 75;
+    
     this.inc += 1;
   };
   

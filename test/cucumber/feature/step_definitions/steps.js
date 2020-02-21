@@ -47,9 +47,11 @@ When(/^The entity is disposed$/, function () {
 });
 
 When(/^World remove entity$/, function () {
-  console.log(this.world.getEntities())
-  console.log(this.system.entities)
   this.world.removeEntity(this.entity.getId());
+});
+
+When(/^Dispose of the system$/, function () {
+  this.system.dispose();
 });
 
 /**
@@ -87,3 +89,6 @@ Then(/^Remove entity from systems$/, function () {
   Assert.equal(this.system.entities.size, 0);
 });
 
+Then(/^Remove the system from the world$/, function () {
+  Assert.equal(this.world.getSystems().size, 0);
+});
