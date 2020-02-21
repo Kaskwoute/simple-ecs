@@ -1,3 +1,5 @@
+import { pipe } from './utils';
+
 const World = () => {
   /**
    * Store all entities of the world.
@@ -9,9 +11,9 @@ const World = () => {
   /**
    * Store entities which need to be tested at beginning of next tick.
    *
-   * @property { Set } entitiesSystemsDirty
+   * @property { Set } dirtyEntities
    */
-  let entitiesSystemsDirty = new Set();
+  let dirtyEntities = new Set();
   
   /**
    * Store all systems of the world.
@@ -40,9 +42,9 @@ const World = () => {
    * Retrieve world systems.
    *
    * @method getDirtyEntities
-   * @return { Set } entitiesSystemsDirty
+   * @return { Set } dirtyEntities
    */
-  const getDirtyEntities = () => entitiesSystemsDirty;
+  const getDirtyEntities = () => dirtyEntities;
   
   /**
    * Add an entity to the world.
@@ -60,9 +62,16 @@ const World = () => {
     }
     
     if (entities.has(id)) return;
+    
+    const setDirty = (entityId) => {
+      dirtyEntities.add(entityId);
+    };
+    
+    // Set entity method to set herself dirty in the world list
+    entity.setDirtyFunction(setDirty);
   
-    entitiesSystemsDirty.add(id);
-  
+    entity.setDetachFunction(removeEntity);
+    
     entities.set(id, entity);
   };
   
@@ -81,6 +90,8 @@ const World = () => {
     
     if (!entities.has(entityId)) return;
     
+    systems.forEach(system => system.removeEntity(entityId));
+    
     entities.delete(entityId);
   };
   
@@ -92,7 +103,7 @@ const World = () => {
    * @return { undefined }
    */
   const addSystem = (system) => {
-    if(!systems.has(system.id))
+    if (!systems.has(system.id))
       systems.set(system.id, system);
   };
   
@@ -108,20 +119,42 @@ const World = () => {
       console.warn('No id provided to remove system');
       return;
     }
-  
+    
     if (!systems.has(systemId)) return;
-  
+    
     systems.delete(systemId);
   };
   
   /**
    * Update the world.
    *
+   * @param { Number } elapsed
    * @return { undefined }
    */
-  const update = () => {};
+  const update = (elapsed) => {
+    if (dirtyEntities.size > 0) {
+      dirtyEntities.forEach(entityId => {
+        systems.forEach(system => {
+          system.addEntity(entities.get(entityId))
+        })
+      });
+      
+      dirtyEntities.clear();
+    }
+    
+    systems.forEach(system => system.updateAll(elapsed))
+  };
   
-  return Object.freeze({ getEntities, getSystems, getDirtyEntities, addEntity, removeEntity, addSystem, removeSystem, update })
+  return Object.freeze({
+    getEntities,
+    getSystems,
+    getDirtyEntities,
+    addEntity,
+    removeEntity,
+    addSystem,
+    removeSystem,
+    update,
+  })
 };
 
 export {

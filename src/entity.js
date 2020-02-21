@@ -13,12 +13,21 @@ const Entity = (initComponents = []) => {
   const id = uniqid();
   
   /**
-   * Reference to the world set of dirty entities
+   * This function is set when the entity is added to a world
+   * Function to update the linked world
    * Updated when entity has a change in component
    *
-   * @property { undefined | Set } entitiesSystemsDirty
+   * @property { undefined | function }
    */
-  let entitiesSystemsDirty = undefined;
+  let setDirty = undefined;
+  
+  /**
+   * This function is set when the entity is added to a world
+   * Function to detach entity from the world
+   *
+   * @property { undefined | function }
+   */
+  let detachFromWorld = undefined;
   
   /**
    * Components of the entity stored as key-value pairs.
@@ -44,19 +53,25 @@ const Entity = (initComponents = []) => {
   const getComponents = () => components;
   
   /**
-   * Append this entityId to the dirty array
+   * Use to set the setDirty fn when attached to a world
+   * Automatically set this entity as dirty when attached to a world
    *
-   * @method setDirty
+   * @method setDirtyFunction
+   * @param { function } setDirtyFn
    */
-  const setDirty = () => {};
+  const setDirtyFunction = (setDirtyFn) => {
+    setDirty = setDirtyFn;
+    
+    setDirty(id);
+  };
   
   /**
-   * Get entity id
+   * Use to set the detachFromWorld fn when attached to a world
    *
-   * @method setWorld
-   * @param { Set } dirtyArray
+   * @method setDisposeFunction
+   * @param { function } setDetachFn
    */
-  const referenceDirtyArray = (dirtyArray) => { entitiesSystemsDirty = dirtyArray };
+  const setDetachFunction = (setDetachFn) => { detachFromWorld = setDetachFn };
   
   /**
    * Add a component to the entity.
@@ -70,15 +85,17 @@ const Entity = (initComponents = []) => {
       console.warn('Component should have a unique name');
       return;
     }
-  
+    
     if (!component.values) {
       console.warn(`Component ${ component.name } has empty values, it will be initiated with as default ({})`)
     }
-  
+    
     components = {
       ...components,
       [component.name]: Object.assign({}, component.values),
-    }
+    };
+    
+    if (typeof setDirty === 'function') setDirty(id);
   };
   
   /**
@@ -97,6 +114,8 @@ const Entity = (initComponents = []) => {
     if (!components[name]) return;
     
     components = omit(components, name);
+    
+    if (typeof setDirty === 'function') setDirty(id);
   };
   
   /**
@@ -105,7 +124,14 @@ const Entity = (initComponents = []) => {
    * @method dispose
    * @return { undefined }
    */
-  const dispose = () => {};
+  const dispose = () => {
+    if (!(typeof detachFromWorld === 'function')) {
+      console.warn(`Entity ${ id } is not attached to a World`);
+      return;
+    }
+    
+    detachFromWorld(id);
+  };
   
   /**
    * Init with components.
@@ -113,8 +139,8 @@ const Entity = (initComponents = []) => {
    * @method init
    * @return { undefined }
    */
-  const init = function() {
-    if(Array.isArray(initComponents) && initComponents.length > 0) {
+  const init = function () {
+    if (Array.isArray(initComponents) && initComponents.length > 0) {
       initComponents.forEach(component => addComponent(component))
     }
   }();
@@ -122,13 +148,15 @@ const Entity = (initComponents = []) => {
   return Object.freeze({
     getId,
     getComponents,
-    referenceDirtyArray,
+    setDetachFunction,
+    detachFromWorld,
+    setDirtyFunction,
     addComponent,
     removeComponent,
-    dispose
+    dispose,
   })
 };
 
 export {
-  Entity
+  Entity,
 }

@@ -8,7 +8,7 @@
     "bundle": "webpack --config webpack/prod.js",
     "bundle:watch": "webpack -w --config webpack/dev.js",
     "test:unit": "riteway -r @babel/register -r @babel/polyfill test/unit/*.test.js",
-    "test:integration": "cucumber-js --require-module @babel/register --require-module @babel/polyfill ./test/cucumber/feature --format"
+    "test:integration": "cucumber-js --require-module @babel/register --require-module @babel/polyfill ./test/cucumber/feature"
   },
   "author": "Antoine peyrin",
   "license": "ISC",

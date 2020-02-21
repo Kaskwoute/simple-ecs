@@ -6,6 +6,12 @@ const omit = (obj, keys) => {
     }, {});
 };
 
+const pipe = (...fns) => x => fns.reduce((v, f) => f(v), x);
+
+const noop = () => {};
+
 export {
-  omit
+  omit,
+  pipe,
+  noop
 }

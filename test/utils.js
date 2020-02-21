@@ -20,10 +20,12 @@ const health = (health) => ({
 function AliveSystem() {
   System.call(this);
   
+  this.inc = 0;
+  
   this.update = function (entity) {
     let { health } = entity.getComponents();
-    
-    console.log(health)
+
+    this.inc += 1;
   };
   
   this.isEligible = function (entity) {

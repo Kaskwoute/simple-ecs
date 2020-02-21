@@ -67,9 +67,16 @@ const System = function () {
    * Apply update to each entity of this system.
    *
    * @method updateAll
+   * @param { number } elapsed
    * @return { undefined }
    */
-  this.updateAll = function () {};
+  this.updateAll = function (elapsed) {
+    this.preUpdate();
+
+    this.entities.forEach(entity => this.update(entity, elapsed));
+  
+    this.postUpdate();
+  };
   
   /**
    * Abstract method to subclass. Called once per update, before entities
