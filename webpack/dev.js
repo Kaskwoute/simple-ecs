@@ -5,6 +5,7 @@ const prod = require('./prod');
 
 module.exports = merge(prod, {
   mode: 'development',
+  devtool: 'inline-source-map',
   watchOptions: {
     ignored: /node_modules/,
   },

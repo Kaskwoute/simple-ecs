@@ -1,14 +1,17 @@
 {
   "name": "simple-ecs",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
   "scripts": {
     "bundle": "webpack --config webpack/prod.js",
     "bundle:watch": "webpack -w --config webpack/dev.js",
     "test:unit": "riteway -r @babel/register -r @babel/polyfill test/unit/*.test.js",
     "test:integration": "cucumber-js --require-module @babel/register --require-module @babel/polyfill ./test/cucumber/feature"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
   },
   "author": "Antoine peyrin",
   "license": "ISC",

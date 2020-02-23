@@ -1,6 +1,8 @@
 **/src/**
-**/tests/**
+**/test/**
 **/node_modules/**
 **/webpack/**
 .gitignore
 .idea/**
+yalc**
+yarn-error.log
