@@ -68,7 +68,7 @@ const System = function () {
    * @return { undefined }
    */
   this.dispose = function () {
-    console.log(`System: ${this.id} is not attached to a world`)
+    console.warn(`System: ${this.id} is not attached to a world`)
   };
   
   /**

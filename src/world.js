@@ -55,7 +55,7 @@ const World = () => {
    */
   const addEntity = (entity) => {
     const id = entity.getId();
-    
+
     if (!id) {
       console.warn('Entity should have an id');
       return;
@@ -103,9 +103,16 @@ const World = () => {
    * @return { undefined }
    */
   const addSystem = (system) => {
+    if(!system) return;
+    
+    if(!system.id) {
+      console.warn('System should have an id');
+      return;
+    }
+    
     if (!systems.has(system.id)) {
       systems.set(system.id, system);
-     
+
       // TODO: Check if there is a better solution
       system.dispose = function () {
         removeSystem(this.id);
