@@ -8,7 +8,14 @@ const System = function () {
    * @property { String } id
    */
   this.id = uniqid();
-  
+
+  /**
+   * Boolean to tell if this system needs world to update it.
+   *
+   * @property { Boolean } needUpdate
+   */
+  this.needUpdate = true;
+
   /**
    * Entities of the system.
    *

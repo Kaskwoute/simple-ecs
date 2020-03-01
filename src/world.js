@@ -7,21 +7,21 @@ const World = () => {
    * @property { Map } entities<entityId, entity>
    */
   let entities = new Map();
-  
+
   /**
    * Store entities which need to be tested at beginning of next tick.
    *
    * @property { Set } dirtyEntities
    */
   let dirtyEntities = new Set();
-  
+
   /**
    * Store all systems of the world.
    *
    * @property { Map } systems<systemId, system>
    */
   let systems = new Map();
-  
+
   /**
    * Retrieve world entities.
    *
@@ -29,7 +29,7 @@ const World = () => {
    * @return { Map } entities
    */
   const getEntities = () => entities;
-  
+
   /**
    * Retrieve world systems.
    *
@@ -37,7 +37,7 @@ const World = () => {
    * @return { Set } systems
    */
   const getSystems = () => systems;
-  
+
   /**
    * Retrieve world systems.
    *
@@ -45,7 +45,7 @@ const World = () => {
    * @return { Set } dirtyEntities
    */
   const getDirtyEntities = () => dirtyEntities;
-  
+
   /**
    * Add an entity to the world.
    *
@@ -60,21 +60,21 @@ const World = () => {
       console.warn('Entity should have an id');
       return;
     }
-    
+
     if (entities.has(id)) return;
-    
+
     const setDirty = (entityId) => {
       dirtyEntities.add(entityId);
     };
-    
+
     // Set entity method to set herself dirty in the world list
     entity.setDirtyFunction(setDirty);
-  
+
     entity.setDetachFunction(removeEntity);
-    
+
     entities.set(id, entity);
   };
-  
+
   /**
    * Remove an entity from the world.
    *
@@ -87,14 +87,14 @@ const World = () => {
       console.warn('No id provided to remove entity');
       return;
     }
-    
+
     if (!entities.has(entityId)) return;
-    
+
     systems.forEach(system => system.removeEntity(entityId));
 
     entities.delete(entityId);
   };
-  
+
   /**
    * Add a system to the world.
    *
@@ -104,12 +104,12 @@ const World = () => {
    */
   const addSystem = (system) => {
     if(!system) return;
-    
+
     if(!system.id) {
       console.warn('System should have an id');
       return;
     }
-    
+
     if (!systems.has(system.id)) {
       systems.set(system.id, system);
 
@@ -119,7 +119,7 @@ const World = () => {
       }
     }
   };
-  
+
   /**
    * Remove a system from the world.
    *
@@ -132,12 +132,12 @@ const World = () => {
       console.warn('No id provided to remove system');
       return;
     }
-    
+
     if (!systems.has(systemId)) return;
-    
+
     systems.delete(systemId);
   };
-  
+
   /**
    * Update the world.
    *
@@ -151,13 +151,15 @@ const World = () => {
           system.addEntity(entities.get(entityId))
         })
       });
-      
+
       dirtyEntities.clear();
     }
-    
-    systems.forEach(system => system.updateAll(elapsed))
+
+    systems.forEach(system => {
+      if(system.needUpdate) system.updateAll(elapsed);
+    })
   };
-  
+
   return Object.freeze({
     getEntities,
     getSystems,
