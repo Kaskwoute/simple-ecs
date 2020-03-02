@@ -3,14 +3,15 @@ import { omit } from './utils';
 
 /**
  * @param { Array } initComponents
+ * @param { String } initId
  */
-const Entity = (initComponents = []) => {
+const Entity = (initComponents = [], initId) => {
   /**
    * Unique identifier of the entity.
    *
    * @property { String } id
    */
-  const id = uniqid();
+  const id = initId || uniqid();
   
   /**
    * This function is set when the entity is added to a world
