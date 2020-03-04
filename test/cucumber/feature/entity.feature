@@ -27,3 +27,14 @@ Feature: Entity
     When An Entity is added to the world
     When The entity is disposed
     Then Remove the entity from the world
+
+  Scenario: remove entity from system register when component is removed in next world update
+    Given An entity with health component
+    Given A world
+    Given AliveSystem
+    When A system is added to the world
+    When An Entity is added to the world
+    When World update
+    When A component is removed from the entity
+    When World update
+    Then Remove entity from systems

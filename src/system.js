@@ -42,7 +42,11 @@ const System = function () {
    * @return { undefined }
    */
   this.addEntity = function (entity) {
-    if (this.isEligible(entity)) {
+    const isEligible = this.isEligible(entity);
+
+    if(!isEligible && this.entities.has(entity.getId())) this.entities.delete(entity.getId());
+
+    if (isEligible) {
       this.entities.set(entity.getId(), entity);
   
       this.enter(entity)

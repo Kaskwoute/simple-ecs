@@ -39,7 +39,11 @@ When(/^A component is added to the entity$/, function () {
 });
 
 When(/^A component is removed from the entity$/, function () {
-  this.entity.removeComponent(health(50).name);
+//  console.log(this.system);
+  console.log(this.world.getEntities());
+  console.log(this.world.getSystems());
+//  console.log(this.entity);
+  this.entity.removeComponent('health');
 });
 
 When(/^The entity is disposed$/, function () {
