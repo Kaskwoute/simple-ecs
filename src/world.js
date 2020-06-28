@@ -9,7 +9,7 @@ const World = () => {
   let entities = new Map();
 
   /**
-   * Store entities which need to be tested at beginning of next tick.
+   * Store entities ID which need to be tested at beginning of next tick.
    *
    * @property { Set } dirtyEntities
    */
@@ -147,8 +147,13 @@ const World = () => {
   const update = (elapsed) => {
     if (dirtyEntities.size > 0) {
       dirtyEntities.forEach(entityId => {
+
+        // TODO: remove dirty component from entity here
+        const entity = entities.get(entityId);
+        entity.removeDirtyComponents();
+
         systems.forEach(system => {
-          system.addEntity(entities.get(entityId))
+          system.addEntity(entity)
         })
       });
 

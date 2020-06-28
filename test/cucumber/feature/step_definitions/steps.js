@@ -38,12 +38,8 @@ When(/^A component is added to the entity$/, function () {
   this.entity.addComponent(position);
 });
 
-When(/^A component is removed from the entity$/, function () {
-//  console.log(this.system);
-  console.log(this.world.getEntities());
-  console.log(this.world.getSystems());
-//  console.log(this.entity);
-  this.entity.removeComponent('health');
+When(/^A component is set dirty in the entity$/, function () {
+  this.entity.setDirtyComponent('health');
 });
 
 When(/^The entity is disposed$/, function () {

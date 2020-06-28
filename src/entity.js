@@ -12,7 +12,7 @@ const Entity = (initComponents = [], initId) => {
    * @property { String } id
    */
   const id = initId || uniqid();
-  
+
   /**
    * This function is set when the entity is added to a world
    * Function to update the linked world
@@ -36,7 +36,15 @@ const Entity = (initComponents = [], initId) => {
    * @property { Object } components
    */
   let components = {};
-  
+
+  /**
+   * Object of components calculated for next tick of the world
+   * Only used when we remove a component from the entity
+   *
+   * @property { Array } dirtyComponents
+   */
+  let dirtyComponents = [];
+
   /**
    * Get entity id
    *
@@ -100,23 +108,38 @@ const Entity = (initComponents = [], initId) => {
   };
   
   /**
-   * Remove a component from the entity.
+   * Set a component dirty in the entity.
+   *
+   * @method setDirtyComponent
+   * @param { String } name: Component name
+   * @return { undefined }
+   */
+  const setDirtyComponent = (name) => {
+    if (!name || typeof name !== 'string') {
+      console.warn('Parameter name is either missing or is not a string');
+      return;
+    }
+
+    if (!components[name]) return;
+
+    dirtyComponents.push(name);
+
+    if (typeof setDirty === 'function') setDirty(id);
+  };
+
+    /**
+   * Remove all dirty components from the entity.
    *
    * @method removeComponent
    * @param { String } name: Component name
    * @return { undefined }
    */
-  const removeComponent = (name) => {
-    if (!name || typeof name !== 'string') {
-      console.warn('Parameter name is either missing or is not a string');
-      return;
-    }
-    
-    if (!components[name]) return;
-    
-    components = omit(components, name);
-    
-    if (typeof setDirty === 'function') setDirty(id);
+  const removeDirtyComponents = () => {
+    dirtyComponents.forEach(componentName => {
+      components = omit(components, componentName);
+    })
+
+    dirtyComponents = [];
   };
   
   /**
@@ -153,8 +176,9 @@ const Entity = (initComponents = [], initId) => {
     detachFromWorld,
     setDirtyFunction,
     addComponent,
-    removeComponent,
+    setDirtyComponent,
     dispose,
+    removeDirtyComponents
   })
 };
 

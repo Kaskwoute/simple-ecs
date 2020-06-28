@@ -49,23 +49,23 @@ describe('Entity.removeComponent', async assert => {
   entity.addComponent(health(100));
 
   {
-    entity.removeComponent('health');
+    entity.setDirtyComponent('health');
 
     assert({
-      given: 'removing a owned component',
-      should: 'remove the component from entity.components',
-      actual: entity.getComponents(),
-      expected: {}
+      given: 'setting dirty a owned component',
+      should: 'not change the list of components',
+      actual: Object.keys(entity.getComponents()).length,
+      expected: 1
     });
 
     entity.addComponent(health(100));
 
     const entity2 = entity;
 
-    entity2.removeComponent('bloup');
+    entity2.setDirtyComponent('bloup');
 
     assert({
-      given: 'removing a unknown component',
+      given: 'setting dirty a unknown component',
       should: 'not change the object',
       actual: entity2.getComponents(),
       expected: entity.getComponents()

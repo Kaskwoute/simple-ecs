@@ -18,7 +18,7 @@ Feature: Entity
     Given A world
     When An Entity is added to the world
     When World update
-    When A component is removed from the entity
+    When A component is set dirty in the entity
     Then Set this entity as dirty in world dirtyEntities
 
   Scenario: dispose of an entity
@@ -35,6 +35,6 @@ Feature: Entity
     When A system is added to the world
     When An Entity is added to the world
     When World update
-    When A component is removed from the entity
+    When A component is set dirty in the entity
     When World update
     Then Remove entity from systems
