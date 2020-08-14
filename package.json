@@ -1,8 +1,8 @@
 {
-  "name": "simple-ecs",
+  "name": "@apeyrin/simple-ecs",
   "version": "1.0.0",
   "description": "",
-  "main": "./dist/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "bundle": "webpack --config webpack/prod.js",
     "bundle:watch": "webpack -w --config webpack/dev.js",
