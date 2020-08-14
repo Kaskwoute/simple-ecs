@@ -1,6 +1,6 @@
 {
   "name": "simple-ecs",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -8,11 +8,12 @@
     "bundle:watch": "webpack -w --config webpack/dev.js",
     "test:unit": "riteway -r @babel/register -r @babel/polyfill test/unit/*.test.js",
     "test:integration": "cucumber-js --require-module @babel/register --require-module @babel/polyfill ./test/cucumber/feature",
-    "test": "yarn test:unit && yarn test:integration"
+    "test": "yarn test:unit && yarn test:integration",
+    "bundle:publish": "yarn bundle && yarn test && yarn bundle && npm publish"
   },
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/Kaskwoute/simple-ecs"
   },
   "author": "Antoine peyrin",
   "license": "ISC",
